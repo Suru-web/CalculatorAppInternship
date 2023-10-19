@@ -3,8 +3,22 @@
     <style name="Base.Theme.Calculator" parent="Theme.Material3.DayNight.NoActionBar">
         <!-- Customize your dark theme here. -->
         <!-- <item name="colorPrimary">@color/my_dark_primary</item> -->
+        <item name="fontFamily">@font/comfortaa</item>
     </style>
-    <style name="Button.White" parent="Widget.AppCompat.Button">
-        <item name="android:background">@drawable/button_background</item>
+
+
+    <style name="SCREEN">
+        <item name="android:background">@color/navyBlue</item>
     </style>
+    <style name="TEXT">
+        <item name="android:textColor">@color/white</item>
+    </style>
+    <style name="BUTTON">
+        <item name="android:background">@drawable/button_background_night</item>
+        <item name="android:textColor">@color/white</item>
+    </style>
+    <style name="RELATIVELAY">
+        <item name="android:background">@drawable/relativelayout_topcorner_round_night</item>
+    </style>
+
 </resources>

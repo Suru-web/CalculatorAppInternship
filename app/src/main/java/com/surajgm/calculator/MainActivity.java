@@ -1,47 +1,116 @@
 package com.surajgm.calculator;
 
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.appcompat.app.AppCompatDelegate;
 
+import android.annotation.SuppressLint;
+import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.view.View;
 import android.view.Window;
+import android.view.WindowInsetsController;
 import android.view.WindowManager;
-import android.widget.GridLayout;
+import android.widget.Button;
 
 import com.airbnb.lottie.LottieAnimationView;
 
 public class MainActivity extends AppCompatActivity {
 
     LottieAnimationView theme;
-    Boolean light=true;
-    GridLayout gridLayout;
+    Button zero, one, two, three, four, five, six, seven, eight, nine, isequal, add, sub, mul, div, mod, clear, invertsign, erase, addpoint;
+    boolean isLightMode = true;
+    private static final String THEME_PREF = "theme_pref";
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
-        getWindow().setFlags(WindowManager.LayoutParams.FLAG_LAYOUT_NO_LIMITS,WindowManager.LayoutParams.FLAG_LAYOUT_NO_LIMITS);
+        getWindow().setFlags(WindowManager.LayoutParams.FLAG_LAYOUT_NO_LIMITS, WindowManager.LayoutParams.FLAG_LAYOUT_NO_LIMITS);
         Window window = getWindow();
-        int flags = window.getDecorView().getSystemUiVisibility();
-        flags |= View.SYSTEM_UI_FLAG_LIGHT_STATUS_BAR;
-        window.getDecorView().setSystemUiVisibility(flags);
 
+        zero = findViewById(R.id.zeroButton);
+        one = findViewById(R.id.oneButton);
+        two = findViewById(R.id.twoButton);
+        three = findViewById(R.id.threeButton);
+        four = findViewById(R.id.fourButton);
+        five = findViewById(R.id.fiveButton);
+        six = findViewById(R.id.sixButton);
+        seven = findViewById(R.id.severButton);
+        eight = findViewById(R.id.eightButton);
+        nine = findViewById(R.id.nineButton);
+        isequal = findViewById(R.id.isEqualToButton);
+        add = findViewById(R.id.addButton);
+        sub = findViewById(R.id.subtractButton);
+        mul = findViewById(R.id.multiplyButton);
+        div = findViewById(R.id.divideButton);
+        mod = findViewById(R.id.modulusButton);
+        clear = findViewById(R.id.clearButton);
+        invertsign = findViewById(R.id.plusMinusButton);
+        erase = findViewById(R.id.clearButton);
+        addpoint = findViewById(R.id.addPointButton);
         theme = findViewById(R.id.themeChangeAnim);
-        theme.setMinAndMaxProgress(0.5f,0.5f);
+
+        // Load the saved theme preference
+        isLightMode = loadThemePreference();
+
+        // Set Lottie animation based on the initial theme
+        setLottieAnimation(isLightMode);
+
         theme.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                if (light){
-                    theme.setMinAndMaxProgress(0.5f,1f);
-                    theme.playAnimation();
-                    light=false;
-                }
-                else {
-                    theme.setMinAndMaxProgress(0f,0.5f);
-                    theme.playAnimation();
-                    light = true;
-                }
+                // Toggle between light and dark mode
+                isLightMode = !isLightMode;
+                saveThemePreference(isLightMode);
+
+                // Set Lottie animation based on the new theme
+                setLottieAnimation(isLightMode);
+
+                // Apply the new theme
+                toggleTheme(isLightMode);
             }
         });
+    }
+
+    @SuppressLint("NewApi")
+    private void toggleTheme(boolean isLightMode) {
+        int mode = isLightMode ? AppCompatDelegate.MODE_NIGHT_NO : AppCompatDelegate.MODE_NIGHT_YES;
+        AppCompatDelegate.setDefaultNightMode(mode);
+
+        View decorView = getWindow().getDecorView();
+        if (isLightMode) {
+            // Change the status bar color to white and set icons to dark
+            decorView.getWindowInsetsController().setSystemBarsAppearance(
+                    WindowInsetsController.APPEARANCE_LIGHT_STATUS_BARS,
+                    WindowInsetsController.APPEARANCE_LIGHT_STATUS_BARS
+            );
+        } else {
+            // Revert to default status bar appearance (dark icons)
+            decorView.getWindowInsetsController().setSystemBarsAppearance(
+                    0,
+                    WindowInsetsController.APPEARANCE_LIGHT_STATUS_BARS
+            );
+        }
+    }
+
+    private void setLottieAnimation(boolean isLightMode) {
+        if (isLightMode) {
+            theme.setMinAndMaxProgress(0.5f,0.5f);
+        } else {
+            theme.setMinAndMaxProgress(1f,1f);
+        }
+        theme.playAnimation();
+    }
+
+    private void saveThemePreference(boolean isLightMode) {
+        SharedPreferences preferences = getSharedPreferences(THEME_PREF, MODE_PRIVATE);
+        SharedPreferences.Editor editor = preferences.edit();
+        editor.putBoolean("isLightMode", isLightMode);
+        editor.apply();
+    }
+
+    private boolean loadThemePreference() {
+        SharedPreferences preferences = getSharedPreferences(THEME_PREF, MODE_PRIVATE);
+        return preferences.getBoolean("isLightMode", true);
     }
 }

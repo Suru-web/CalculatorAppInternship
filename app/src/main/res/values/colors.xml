@@ -6,4 +6,8 @@
     <color name="greenTint">#26e6c4</color>
     <color name="redTint">#eb6767</color>
     <color name="buttonBackground">#e9e9e9</color>
+    <color name="darkGrey">#ff424242</color>
+    <color name="navyBlue">#22252d</color>
+    <color name="lightNavyBlue">#292d36</color>
+    <color name="buttonBackgroundNight">#2c313b</color>
 </resources>
