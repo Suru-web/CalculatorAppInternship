@@ -21,7 +21,7 @@ public class MainActivity extends AppCompatActivity {
 
     LottieAnimationView theme;
     Button zero, one, two, three, four, five, six, seven, eight, nine, isequal, add, sub, mul, div, mod, clear, invertsign, erase, addpoint;
-    boolean isLightMode = true;
+    boolean isLightMode;
     private static final String THEME_PREF = "theme_pref";
 
     @Override
@@ -56,6 +56,7 @@ public class MainActivity extends AppCompatActivity {
 
         isLightMode = loadThemePreference();
         setLottieAnimation(isLightMode);
+        toggleTheme(isLightMode);
 
         theme.setOnClickListener(new View.OnClickListener() {
             @Override
