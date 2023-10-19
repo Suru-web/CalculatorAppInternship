@@ -4,7 +4,10 @@ import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.app.AppCompatDelegate;
 
 import android.annotation.SuppressLint;
+import android.content.Context;
 import android.content.SharedPreferences;
+import android.content.res.Configuration;
+import android.os.Build;
 import android.os.Bundle;
 import android.view.View;
 import android.view.Window;
@@ -26,7 +29,7 @@ public class MainActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
         getWindow().setFlags(WindowManager.LayoutParams.FLAG_LAYOUT_NO_LIMITS, WindowManager.LayoutParams.FLAG_LAYOUT_NO_LIMITS);
-        Window window = getWindow();
+
 
         zero = findViewById(R.id.zeroButton);
         one = findViewById(R.id.oneButton);
@@ -50,54 +53,47 @@ public class MainActivity extends AppCompatActivity {
         addpoint = findViewById(R.id.addPointButton);
         theme = findViewById(R.id.themeChangeAnim);
 
-        // Load the saved theme preference
-        isLightMode = loadThemePreference();
 
-        // Set Lottie animation based on the initial theme
+        isLightMode = loadThemePreference();
         setLottieAnimation(isLightMode);
 
         theme.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                // Toggle between light and dark mode
                 isLightMode = !isLightMode;
                 saveThemePreference(isLightMode);
-
-                // Set Lottie animation based on the new theme
                 setLottieAnimation(isLightMode);
-
-                // Apply the new theme
                 toggleTheme(isLightMode);
             }
         });
     }
 
-    @SuppressLint("NewApi")
     private void toggleTheme(boolean isLightMode) {
         int mode = isLightMode ? AppCompatDelegate.MODE_NIGHT_NO : AppCompatDelegate.MODE_NIGHT_YES;
         AppCompatDelegate.setDefaultNightMode(mode);
-
         View decorView = getWindow().getDecorView();
         if (isLightMode) {
-            // Change the status bar color to white and set icons to dark
-            decorView.getWindowInsetsController().setSystemBarsAppearance(
-                    WindowInsetsController.APPEARANCE_LIGHT_STATUS_BARS,
-                    WindowInsetsController.APPEARANCE_LIGHT_STATUS_BARS
-            );
+            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.R) {
+                decorView.getWindowInsetsController().setSystemBarsAppearance(
+                        WindowInsetsController.APPEARANCE_LIGHT_STATUS_BARS,
+                        WindowInsetsController.APPEARANCE_LIGHT_STATUS_BARS
+                );
+            }
         } else {
-            // Revert to default status bar appearance (dark icons)
-            decorView.getWindowInsetsController().setSystemBarsAppearance(
-                    0,
-                    WindowInsetsController.APPEARANCE_LIGHT_STATUS_BARS
-            );
+            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.R) {
+                decorView.getWindowInsetsController().setSystemBarsAppearance(
+                        0,
+                        WindowInsetsController.APPEARANCE_LIGHT_STATUS_BARS
+                );
+            }
         }
     }
 
     private void setLottieAnimation(boolean isLightMode) {
         if (isLightMode) {
-            theme.setMinAndMaxProgress(0.5f,0.5f);
+            theme.setMinAndMaxProgress(0.0f,0.5f);
         } else {
-            theme.setMinAndMaxProgress(1f,1f);
+            theme.setMinAndMaxProgress(0.5f,1f);
         }
         theme.playAnimation();
     }
