@@ -41,7 +41,7 @@
             android:text=""
             android:textAlignment="textEnd"
             style="@style/TEXT"
-            android:textSize="30sp"
+            android:textSize="26sp"
             android:layout_margin="20dp"/>
         <TextView
             android:id="@+id/currentNumbers"
