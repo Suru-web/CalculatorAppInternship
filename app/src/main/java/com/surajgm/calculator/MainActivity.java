@@ -109,7 +109,7 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
         vibrator.vibrate(1);
         if (v.getId()==R.id.isEqualToButton){
             isEqualPressed = true;
-            Double answer;
+            Float answer;
             if (!currentEq.isEmpty() && isNumber(currentEq.substring(currentEq.length()-1))) {
                 answer = evaluateExpression(tokenizeEquation(currentEq));
                 historyEq = currentEq+" ="+" "+String.valueOf(answer);
@@ -278,19 +278,19 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
         return tokens;
     }
 
-    private double evaluateExpression(List<String> tokens) {
-        Stack<Double> numbers = new Stack<>();
+    private float evaluateExpression(List<String> tokens) {
+        Stack<Float> numbers = new Stack<>();
         Stack<String> operators = new Stack<>();
 
         for (String token : tokens) {
             if (isNumber(token)) {
-                numbers.push(Double.parseDouble(token));
+                numbers.push(Float.parseFloat(token));
             } else if (isOperator(token)) {
                 while (!operators.isEmpty() && hasHigherPrecedence(operators.peek(), token)) {
-                    double operand2 = numbers.pop();
-                    double operand1 = numbers.pop();
+                    float operand2 = numbers.pop();
+                    float operand1 = numbers.pop();
                     String operator = operators.pop();
-                    double result = applyOperator(operand1, operand2, operator);
+                    float result = applyOperator(operand1, operand2, operator);
                     numbers.push(result);
                 }
                 operators.push(token);
@@ -298,10 +298,10 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
         }
 
         while (!operators.isEmpty()) {
-            double operand2 = numbers.pop();
-            double operand1 = numbers.pop();
+            float operand2 = numbers.pop();
+            float operand1 = numbers.pop();
             String operator = operators.pop();
-            double result = applyOperator(operand1, operand2, operator);
+            float result = applyOperator(operand1, operand2, operator);
             numbers.push(result);
         }
 
@@ -310,7 +310,7 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
 
     private boolean isNumber(String token) {
         try {
-            Double.parseDouble(token);
+            Float.parseFloat(token);
             return true;
         } catch (NumberFormatException e) {
             return false;
@@ -348,7 +348,7 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
         }
     }
 
-    private double applyOperator(double operand1, double operand2, String operator) {
+    private float applyOperator(float operand1, float operand2, String operator) {
         switch (operator) {
             case "+":
                 return operand1 + operand2;
@@ -361,7 +361,7 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
             case "⁒":
                 return operand1 % operand2;
             case "^":
-                return Math.pow(operand1,operand2);
+                return (float) Math.pow(operand1,operand2);
             default:
                 throw new IllegalArgumentException("Invalid operator: " + operator);
         }
