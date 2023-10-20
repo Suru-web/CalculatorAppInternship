@@ -21,4 +21,9 @@
         <item name="android:background">@drawable/relativelayout_topcorner_round_night</item>
     </style>
 
+    <style name="EDITTEXT">
+        <item name="android:textColor">@color/white</item>
+        <item name="android:background">@null</item>
+    </style>
+
 </resources>
