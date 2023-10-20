@@ -110,11 +110,13 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
         if (v.getId()==R.id.isEqualToButton){
             isEqualPressed = true;
             Double answer;
-            if (!currentEq.isEmpty()) {
+            if (!currentEq.isEmpty() && isNumber(currentEq.substring(currentEq.length()-1))) {
                 answer = evaluateExpression(tokenizeEquation(currentEq));
                 historyEq = currentEq+" ="+" "+String.valueOf(answer);
                 history.setText(historyEq);
                 current.setText(String.valueOf(answer));
+            }else if (currentEq.length() > 0 && isOperator(currentEq.substring(currentEq.length()-1))){
+                current.setText(currentEq);
             }
         } else if (v.getId()==R.id.oneButton) {
             currentEq = currentEq.concat("1");
