@@ -32,6 +32,7 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
     String currentEq,historyEq;
     Boolean isPointPressed = false,isEqualPressed = false;
 
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -101,9 +102,6 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
 
     @Override
     public void onClick(View v) {
-        if (isEqualPressed){
-            current.setText("");
-        }
         currentEq = current.getText().toString();
         historyEq = history.getText().toString();
         vibrator.vibrate(1);
@@ -112,49 +110,89 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
             Float answer;
             if (!currentEq.isEmpty() && isNumber(currentEq.substring(currentEq.length()-1))) {
                 answer = evaluateExpression(tokenizeEquation(currentEq));
-                historyEq = currentEq+" ="+" "+String.valueOf(answer);
+                historyEq = currentEq+" ="+" "+ answer;
                 history.setText(historyEq);
                 current.setText(String.valueOf(answer));
             }else if (currentEq.length() > 0 && isOperator(currentEq.substring(currentEq.length()-1))){
                 current.setText(currentEq);
             }
         } else if (v.getId()==R.id.oneButton) {
+            if (isEqualPressed){
+                currentEq = "";
+                current.setText(currentEq);
+            }
             currentEq = currentEq.concat("1");
             current.setText(currentEq);
             isEqualPressed = false;
         } else if (v.getId()==R.id.twoButton) {
+            if (isEqualPressed){
+                currentEq = "";
+                current.setText(currentEq);
+            }
             currentEq = currentEq.concat("2");
             current.setText(currentEq);
             isEqualPressed = false;
         } else if (v.getId()==R.id.threeButton) {
+            if (isEqualPressed){
+                currentEq = "";
+                current.setText(currentEq);
+            }
             currentEq = currentEq.concat("3");
             current.setText(currentEq);
             isEqualPressed = false;
         } else if (v.getId()==R.id.fourButton) {
+            if (isEqualPressed){
+                currentEq = "";
+                current.setText(currentEq);
+            }
             currentEq = currentEq.concat("4");
             current.setText(currentEq);
             isEqualPressed = false;
         } else if (v.getId()==R.id.fiveButton) {
+            if (isEqualPressed){
+                currentEq = "";
+                current.setText(currentEq);
+            }
             currentEq = currentEq.concat("5");
             current.setText(currentEq);
             isEqualPressed = false;
         } else if (v.getId()==R.id.sixButton) {
+            if (isEqualPressed){
+                currentEq = "";
+                current.setText(currentEq);
+            }
             currentEq = currentEq.concat("6");
             current.setText(currentEq);
             isEqualPressed = false;
         } else if (v.getId()==R.id.severButton) {
+            if (isEqualPressed){
+                currentEq = "";
+                current.setText(currentEq);
+            }
             currentEq = currentEq.concat("7");
             current.setText(currentEq);
             isEqualPressed = false;
         } else if (v.getId()==R.id.eightButton) {
+            if (isEqualPressed){
+                currentEq = "";
+                current.setText(currentEq);
+            }
             currentEq = currentEq.concat("8");
             current.setText(currentEq);
             isEqualPressed = false;
         } else if (v.getId()==R.id.nineButton) {
+            if (isEqualPressed){
+                currentEq = "";
+                current.setText(currentEq);
+            }
             currentEq = currentEq.concat("9");
             current.setText(currentEq);
             isEqualPressed = false;
         } else if (v.getId()==R.id.zeroButton) {
+            if (isEqualPressed){
+                currentEq = "";
+                current.setText(currentEq);
+            }
             currentEq = currentEq.concat("0");
             current.setText(currentEq);
             isEqualPressed = false;
@@ -166,8 +204,10 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
             isEqualPressed = false;
         } else if (v.getId()==R.id.backspaceButton) {
             StringBuilder sb = new StringBuilder(currentEq);
-            currentEq = sb.deleteCharAt(currentEq.length()-1).toString();
-            current.setText(currentEq);
+            if (!currentEq.isEmpty()) {
+                currentEq = sb.deleteCharAt(currentEq.length()-1).toString();
+                current.setText(currentEq);
+            }
             isEqualPressed = false;
         } else if (v.getId()==R.id.addPointButton) {
             if (isPointPressed){
@@ -184,7 +224,6 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
             if (currentEq.length() > 0 && isOperator(currentEq.substring(currentEq.length()-1))){
                 currentEq = currentEq.substring(0,currentEq.length()-1)+"+";
                 current.setText(currentEq);
-                System.out.println(currentEq);
             }
             else if (currentEq.length() > 0 && isNumber(currentEq.substring(currentEq.length()-1))){
                 currentEq = currentEq.concat("+");
@@ -366,8 +405,6 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
                 throw new IllegalArgumentException("Invalid operator: " + operator);
         }
     }
-
-
 
     private void toggleTheme(boolean isLightMode) {
         int mode = isLightMode ? AppCompatDelegate.MODE_NIGHT_NO : AppCompatDelegate.MODE_NIGHT_YES;
