@@ -4,4 +4,7 @@
     <string name="multiply">×</string>
     <string name="divide">÷</string>
     <string name="modulus">⁒</string>
+    <string name="history">History</string>
+    <string name="clear">Clear</string>
+    <string name="back_button">Back Button</string>
 </resources>

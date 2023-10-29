@@ -1,5 +1,6 @@
 package com.surajgm.calculator;
 
+import android.content.Intent;
 import android.content.SharedPreferences;
 import android.os.Build;
 import android.os.Bundle;
@@ -8,6 +9,7 @@ import android.view.View;
 import android.view.WindowInsetsController;
 import android.view.WindowManager;
 import android.widget.Button;
+import android.widget.ImageButton;
 import android.widget.TextView;
 
 import androidx.appcompat.app.AppCompatActivity;
@@ -26,11 +28,12 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
     LottieAnimationView theme;
     Button zero, one, two, three, four, five, six, seven, eight, nine, isequal, add, sub, mul, div, mod, clear, power, erase, addpoint;
     boolean isLightMode;
-    private static final String THEME_PREF = "theme_pref";
+    public static final String THEME_PREF = "theme_pref";
     Vibrator vibrator;
     TextView history,current;
-    String currentEq,historyEq;
+    String currentEq,historyEq="0",currentHistory;
     Boolean isPointPressed = false,isEqualPressed = false;
+    ImageButton historyBtn;
 
 
     @Override
@@ -63,6 +66,7 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
         theme = findViewById(R.id.themeChangeAnim);
         history = findViewById(R.id.historyNumber);
         current = findViewById(R.id.currentNumbers);
+        historyBtn = findViewById(R.id.clickhistoryButton);
 
         zero.setOnClickListener(this);
         one.setOnClickListener(this);
@@ -84,6 +88,20 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
         power.setOnClickListener(this);
         erase.setOnClickListener(this);
         addpoint.setOnClickListener(this);
+        historyBtn.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                SharedPreferences preferences = getSharedPreferences(THEME_PREF, MODE_PRIVATE);
+                SharedPreferences.Editor editor = preferences.edit();
+                editor.putString("currenteq",currentEq);
+                editor.putString("historyeq",historyEq);
+                editor.apply();
+                Intent intent = new Intent(MainActivity.this, HistoryLayout.class);
+                intent.putExtra("HistoryValue",historyEq);
+                startActivity(intent);
+                overridePendingTransition(R.anim.slide_in_right,R.anim.slide_out_left);
+            }
+        });
 
 
         isLightMode = loadThemePreference();
@@ -101,17 +119,25 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
     }
 
     @Override
+    protected void onResume() {
+        super.onResume();
+        SharedPreferences preferences = getSharedPreferences(THEME_PREF, MODE_PRIVATE);
+        currentEq = preferences.getString("currenteq","");
+        historyEq = preferences.getString("historyeq","");
+    }
+
+    @Override
     public void onClick(View v) {
         currentEq = current.getText().toString();
-        historyEq = history.getText().toString();
         vibrator.vibrate(1);
         if (v.getId()==R.id.isEqualToButton){
             isEqualPressed = true;
             Float answer;
             if (!currentEq.isEmpty() && isNumber(currentEq.substring(currentEq.length()-1))) {
                 answer = evaluateExpression(tokenizeEquation(currentEq));
-                historyEq = currentEq+" ="+" "+ answer;
-                history.setText(historyEq);
+                currentHistory = currentEq+" ="+" "+ answer;
+                historyEq += currentEq+" ="+" "+ answer+"\n";
+                history.setText(currentHistory);
                 current.setText(String.valueOf(answer));
             }else if (currentEq.length() > 0 && isOperator(currentEq.substring(currentEq.length()-1))){
                 current.setText(currentEq);
@@ -198,8 +224,8 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
             isEqualPressed = false;
         } else if (v.getId()==R.id.clearButton) {
             currentEq = "";
-            historyEq = "";
-            history.setText(historyEq);
+            currentHistory = "";
+            history.setText(currentHistory);
             current.setText(currentEq);
             isEqualPressed = false;
         } else if (v.getId()==R.id.backspaceButton) {
@@ -411,6 +437,7 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
         AppCompatDelegate.setDefaultNightMode(mode);
         View decorView = getWindow().getDecorView();
         if (isLightMode) {
+            historyBtn.setBackgroundResource(R.drawable.history_black);
             if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.R) {
                 decorView.getWindowInsetsController().setSystemBarsAppearance(
                         WindowInsetsController.APPEARANCE_LIGHT_STATUS_BARS,
@@ -418,6 +445,7 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
                 );
             }
         } else {
+            historyBtn.setBackgroundResource(R.drawable.history_white);
             if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.R) {
                 decorView.getWindowInsetsController().setSystemBarsAppearance(
                         0,

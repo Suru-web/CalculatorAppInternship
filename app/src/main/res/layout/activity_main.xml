@@ -19,10 +19,23 @@
 
         <com.airbnb.lottie.LottieAnimationView
             android:layout_width="match_parent"
+            android:layout_marginEnd="50dp"
+            android:layout_centerHorizontal="true"
             android:layout_height="match_parent"
             app:lottie_rawRes="@raw/themeswitch"
             android:padding="10dp"
             android:id="@+id/themeChangeAnim"/>
+        <ImageButton
+            android:id="@+id/clickhistoryButton"
+            android:layout_width="30dp"
+            android:layout_height="30dp"
+            android:scaleType="centerCrop"
+            android:background="@null"
+            android:layout_alignParentEnd="true"
+            android:layout_centerVertical="true"
+            android:layout_marginEnd="20dp"
+            android:contentDescription="History"
+            tools:ignore="HardcodedText" />
     </RelativeLayout>
 
     <LinearLayout
