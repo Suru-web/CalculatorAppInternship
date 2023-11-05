@@ -38,7 +38,7 @@ public class HistoryLayout extends AppCompatActivity {
         textView.setText(getIntent().getStringExtra("HistoryValue"));
         isLightMode = preferences.getBoolean("isLightMode", true);
         if (isLightMode){
-            back.setBackgroundResource(R.drawable.back_black);
+            back.setImageResource(R.drawable.back);
             if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.R) {
                 decorView.getWindowInsetsController().setSystemBarsAppearance(
                         WindowInsetsController.APPEARANCE_LIGHT_STATUS_BARS,
@@ -47,7 +47,7 @@ public class HistoryLayout extends AppCompatActivity {
             }
         }
         else {
-            back.setBackgroundResource(R.drawable.back_white);
+            back.setImageResource(R.drawable.back_white);
             if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.R) {
                 decorView.getWindowInsetsController().setSystemBarsAppearance(
                         0,
@@ -59,7 +59,6 @@ public class HistoryLayout extends AppCompatActivity {
             @Override
             public void onClick(View v) {
                 finishAfterTransition();
-                overridePendingTransition(R.anim.slide_in_left,R.anim.slide_out_right);
             }
         });
         clearBtn.setOnClickListener(new View.OnClickListener() {
@@ -76,6 +75,5 @@ public class HistoryLayout extends AppCompatActivity {
     public void onBackPressed() {
         super.onBackPressed();
         finishAfterTransition();
-        overridePendingTransition(R.anim.slide_in_left,R.anim.slide_out_right);
     }
 }

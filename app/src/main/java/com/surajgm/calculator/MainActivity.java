@@ -99,7 +99,6 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
                 Intent intent = new Intent(MainActivity.this, HistoryLayout.class);
                 intent.putExtra("HistoryValue",historyEq);
                 startActivity(intent);
-                overridePendingTransition(R.anim.slide_in_right,R.anim.slide_out_left);
             }
         });
 
@@ -367,6 +366,7 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
             float operand1 = numbers.pop();
             String operator = operators.pop();
             float result = applyOperator(operand1, operand2, operator);
+            System.out.println(result);
             numbers.push(result);
         }
 
@@ -388,18 +388,27 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
 
     private boolean hasHigherPrecedence(String operator1, String operator2) {
         // Return true if operator1 has higher precedence than operator2
-        if (precedence(operator1)>precedence(operator2)){
+        int precedence1 = precedence(operator1);
+        int precedence2 = precedence(operator2);
+
+        if (precedence1 > precedence2) {
+            return true;
+        } else if (precedence1 == precedence2 && isLeftAssociative(operator1)) {
             return true;
         }
+
         return false;
+    }
+    private boolean isLeftAssociative(String operator) {
+        // Define which operators are left-associative
+        return "+-×÷⁒^".contains(operator);
     }
 
     private int precedence(String operator1) {
         switch (operator1) {
             case "+":
-                return 1;
             case "-":
-                return 2;
+                return 1;
             case "×":
                 return 3;
             case "÷":
@@ -437,7 +446,7 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
         AppCompatDelegate.setDefaultNightMode(mode);
         View decorView = getWindow().getDecorView();
         if (isLightMode) {
-            historyBtn.setBackgroundResource(R.drawable.history_black);
+            historyBtn.setImageResource(R.drawable.clock);
             if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.R) {
                 decorView.getWindowInsetsController().setSystemBarsAppearance(
                         WindowInsetsController.APPEARANCE_LIGHT_STATUS_BARS,
@@ -445,7 +454,7 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
                 );
             }
         } else {
-            historyBtn.setBackgroundResource(R.drawable.history_white);
+            historyBtn.setImageResource(R.drawable.clock_white);
             if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.R) {
                 decorView.getWindowInsetsController().setSystemBarsAppearance(
                         0,
